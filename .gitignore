@@ -1,1 +1,55 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.o
+*.a
+*.so
 .DS_Store
+backend/service-dashboard
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.sublime-*
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+npm-error.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Cache directories
+.cache/
+.superpowers/
+__pycache__/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Docker
+.dockerignore
+
+# Temporary files
+tmp/
+temp/
+*.tmp
