@@ -13,6 +13,38 @@ A Progressive Web App (PWA) for monitoring and managing services running on a Pr
 
 ## Architecture
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    User's Browser (PWA)                     │
+│  Frontend (Vue 3) + Service Worker (offline caching)        │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ HTTP/HTTPS
+                       │ (1-2s status, 30s metrics)
+┌──────────────────────▼──────────────────────────────────────┐
+│           Backend API (Go, CT 127:8080)                      │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │  HTTP Server (GET /api/services, GET /health)          ││
+│  │  ┌────────────┐ ┌──────────┐ ┌───────────┐             ││
+│  │  │  Proxmox   │ │  Caddy   │ │Prometheus │             ││
+│  │  │  Client    │ │  Client  │ │  Client   │             ││
+│  │  └────────────┘ └──────────┘ └───────────┘             ││
+│  │  ┌──────────────────────────┐                          ││
+│  │  │  In-Memory Cache (TTL)  │                          ││
+│  │  │  - Status (2s)          │                          ││
+│  │  │  - Metrics (25s)        │                          ││
+│  │  │  - Discovery (10s)      │                          ││
+│  │  └──────────────────────────┘                          ││
+│  └─────────────────────────────────────────────────────────┘│
+└──┬──────────────────────┬──────────────────────┬────────────┘
+   │                      │                      │
+   ▼ API Calls           ▼ Reverse Proxy         ▼
+┌─────────┐         ┌─────────────┐       ┌──────────────┐
+│Proxmox  │         │Caddy Admin  │       │Prometheus    │
+│(192...5)│         │API (192...82│       │(192...73)    │
+│:8006    │         │:2019        │       │:9090         │
+└─────────┘         └─────────────┘       └──────────────┘
+```
+
 ### Backend (Go)
 - RESTful API for service discovery and metrics
 - Integrates with Proxmox API for container status
@@ -109,6 +141,36 @@ Service configuration in `frontend/public/config/services-config.json`:
 - Brand colors
 - Metric thresholds
 
+### Full Configuration Reference
+
+**Backend config.yaml:**
+```yaml
+server:
+  port: 8080                    # HTTP port for API
+
+proxmox:
+  api_url: https://pve:8006    # Proxmox VE API URL
+  token_id: user@pam!token     # API token ID
+  token_secret: secret-value   # API token secret
+
+caddy:
+  api_url: http://caddy:2019   # Caddy admin API URL
+
+prometheus:
+  url: http://prometheus:9090  # Prometheus server URL
+
+cache:
+  status_ttl: 2s               # Container status cache duration
+  metrics_ttl: 25s             # Prometheus metrics cache duration
+  discovery_ttl: 10s           # Service discovery cache duration
+```
+
+**Frontend services-config.json:**
+- Each service has displayName, icon, color, and thresholds
+- Icons referenced from `/public/icons/*.svg`
+- Colors as hex values for visual consistency
+- Thresholds define warning/critical levels for metrics
+
 ## API Endpoints
 
 - `GET /api/services` - List all services with status and metrics
@@ -195,9 +257,68 @@ cd frontend && npm run build
 docker-compose up --build
 ```
 
+## Troubleshooting
+
+### Backend Issues
+
+**Service won't start**
+- Check config file exists at `/etc/service-dashboard/config.yaml`
+- Verify Proxmox, Caddy, and Prometheus URLs are reachable
+- Check logs: `journalctl -u dashboard -n 50`
+
+**No services showing up**
+- Verify Proxmox API token has correct permissions
+- Check Proxmox API URL in config (should include `/api2/json`)
+- Ensure containers are running: `pct list`
+- Look for API errors in logs
+
+**Metrics showing zeros or "N/A"**
+- Verify Prometheus is running and accessible
+- Check node-exporter is running on each container
+- Check Prometheus has data: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
+
+**Health check fails**
+- Run: `curl http://localhost:8080/health` and check which dependency failed
+- Test each endpoint separately (Proxmox, Caddy, Prometheus)
+
+### Frontend Issues
+
+**Service worker not working**
+- Check browser console for errors
+- Verify service-worker.js is being loaded
+- Try: `Application > Service Workers` in DevTools
+- Clear cache: `DevTools > Application > Clear storage`
+
+**PWA won't install**
+- Ensure HTTPS is enabled (via Caddy reverse proxy)
+- Check manifest.json is valid and accessible
+- Verify icons exist and are 192x192 and 512x512
+
+**Styles not loading**
+- Check nginx is serving static files correctly
+- Verify vite build output is in `/usr/share/nginx/html`
+- Check browser console for 404 errors
+
+### Network Issues
+
+**CORS errors**
+- Backend should allow all origins (no CORS restrictions)
+- Verify frontend can reach backend API URL
+- Test: `curl http://localhost:8080/health` from frontend container
+
+**Reverse proxy not working**
+- Check Caddy config: `curl http://caddy:2019/admin/api/config`
+- Verify route syntax in Caddyfile
+- Reload Caddy: `systemctl reload caddy`
+
 ## Deployment
 
-See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment instructions to CT 127.
+**Production Deployment (CT 127):**
+- Backend runs as systemd service: `systemctl status dashboard`
+- Config located at: `/etc/service-dashboard/config.yaml`
+- Reverse proxy via Caddy (CT 126) at: `dashboard.internal.ahproxmox-claude.cc`
+- Binary: `/opt/dashboard/dashboard`
+- Check logs: `journalctl -u dashboard -f`
 
 ## Contributing
 
