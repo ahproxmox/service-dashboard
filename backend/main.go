@@ -3,9 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/ahproxmox/service-dashboard/backend/api"
+	"github.com/ahproxmox/service-dashboard/backend/cache"
 	"github.com/ahproxmox/service-dashboard/backend/config"
+	"github.com/ahproxmox/service-dashboard/backend/discovery"
+	"github.com/ahproxmox/service-dashboard/backend/metrics"
 )
 
 func main() {
@@ -19,6 +24,26 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	fmt.Printf("Service Dashboard loaded config from %s\n", configPath)
-	fmt.Printf("Server listening on port %d\n", cfg.Server.Port)
+	// Initialize cache
+	c := cache.NewCache()
+
+	// Initialize clients
+	proxmoxClient := discovery.NewProxmoxClient(cfg.Proxmox.APIUrl, cfg.Proxmox.TokenId, cfg.Proxmox.TokenSecret)
+	caddyClient := discovery.NewCaddyClient(cfg.Caddy.APIUrl)
+	prometheusClient := metrics.NewPrometheusClient(cfg.Prometheus.Url)
+	matcher := discovery.NewMatcher()
+
+	// Initialize handlers with components
+	api.InitHandlers(c, proxmoxClient, caddyClient, prometheusClient, matcher, cfg)
+
+	// Register routes
+	http.HandleFunc("/api/services", api.GetServices)
+	http.HandleFunc("/health", api.GetHealth)
+
+	// Start server
+	addr := fmt.Sprintf(":%d", cfg.Server.Port)
+	log.Printf("Service Dashboard starting on %s", addr)
+	if err := http.ListenAndServe(addr, nil); err != nil {
+		log.Fatalf("server error: %v", err)
+	}
 }
