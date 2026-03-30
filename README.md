@@ -313,12 +313,43 @@ docker-compose up --build
 
 ## Deployment
 
-**Production Deployment (CT 127):**
-- Backend runs as systemd service: `systemctl status dashboard`
-- Config located at: `/etc/service-dashboard/config.yaml`
-- Reverse proxy via Caddy (CT 126) at: `dashboard.internal.ahproxmox-claude.cc`
+### Production Deployment (CT 127 + CT 126)
+
+**Backend (CT 127):**
 - Binary: `/opt/dashboard/dashboard`
-- Check logs: `journalctl -u dashboard -f`
+- Systemd service: `/etc/systemd/system/service-dashboard.service`
+- Config: `/etc/service-dashboard/config.yaml` (optional, uses defaults if missing)
+- Runs on port 8080
+- Start/stop: `systemctl start|stop|restart service-dashboard`
+- Logs: `journalctl -u service-dashboard -f`
+- Service configuration:
+  ```ini
+  [Unit]
+  Description=Service Dashboard
+  After=network.target
+
+  [Service]
+  Type=simple
+  User=dashboard
+  WorkingDirectory=/opt/dashboard
+  ExecStart=/opt/dashboard/dashboard
+  Restart=always
+  RestartSec=10
+
+  [Install]
+  WantedBy=multi-user.target
+  ```
+
+**Reverse Proxy (CT 126 - Caddy):**
+- Add to `/etc/caddy/Caddyfile`:
+  ```caddy
+  @dashboard host dashboard.internal.ahproxmox-claude.cc
+  handle @dashboard {
+    reverse_proxy 192.168.88.127:8080
+  }
+  ```
+- Reload Caddy: `systemctl reload caddy`
+- Access: `https://dashboard.internal.ahproxmox-claude.cc`
 
 ## Contributing
 
