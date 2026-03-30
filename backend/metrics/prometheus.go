@@ -39,13 +39,13 @@ func (p *PrometheusClient) GetMetrics(ip string) (*Metrics, error) {
 
 	instance := ip + ":9100"
 
-	// CPU
-	cpu, err := p.queryMetric(fmt.Sprintf(`rate(node_cpu_seconds_total{instance="%s"}[5m])*100`, instance))
+	// CPU - sum across all cores to get total CPU usage
+	cpu, err := p.queryMetric(fmt.Sprintf(`sum(rate(node_cpu_seconds_total{instance="%s"}[5m]))*100`, instance))
 	if err == nil {
 		metrics.CpuPercent = cpu
 	}
 
-	// RAM
+	// RAM - errors ignored for graceful degradation (metric stays 0 if query fails)
 	ramTotal, _ := p.queryMetric(fmt.Sprintf(`node_memory_MemTotal_bytes{instance="%s"}`, instance))
 	ramAvail, _ := p.queryMetric(fmt.Sprintf(`node_memory_MemAvailable_bytes{instance="%s"}`, instance))
 	if ramTotal > 0 {
@@ -59,7 +59,7 @@ func (p *PrometheusClient) GetMetrics(ip string) (*Metrics, error) {
 		metrics.DiskPercent = disk
 	}
 
-	// Network (approximate in/out)
+	// Network (approximate in/out) - errors ignored for graceful degradation (metrics stay 0 if queries fail)
 	netIn, _ := p.queryMetric(fmt.Sprintf(`rate(node_network_receive_bytes_total{instance="%s"}[1m])/1024/1024`, instance))
 	netOut, _ := p.queryMetric(fmt.Sprintf(`rate(node_network_transmit_bytes_total{instance="%s"}[1m])/1024/1024`, instance))
 	metrics.NetworkInMbps = netIn
