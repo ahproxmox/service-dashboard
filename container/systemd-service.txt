@@ -1,0 +1,21 @@
+[Unit]
+Description=Service Dashboard Backend
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dashboard
+Group=dashboard
+WorkingDirectory=/opt/dashboard
+ExecStart=/opt/dashboard/dashboard
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Environment variables for configuration
+Environment="DASHBOARD_CONFIG=/etc/dashboard/config.yaml"
+
+[Install]
+WantedBy=multi-user.target
