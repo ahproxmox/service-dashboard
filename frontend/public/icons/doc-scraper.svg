@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M 25 15 L 25 85 L 75 85 L 75 35 L 55 15 Z" fill="none" stroke="currentColor" stroke-linejoin="miter"/>
+  <line x1="30" y1="30" x2="70" y2="30"/>
+  <line x1="30" y1="42" x2="70" y2="42"/>
+  <line x1="30" y1="54" x2="70" y2="54"/>
+  <line x1="30" y1="66" x2="50" y2="66"/>
+</svg>

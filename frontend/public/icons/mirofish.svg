@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+  <ellipse cx="50" cy="50" rx="25" ry="15"/>
+  <polygon points="75,50 85,45 85,55" fill="currentColor"/>
+  <circle cx="40" cy="45" r="3" fill="currentColor"/>
+  <path d="M 30 65 Q 35 70 40 65 Q 45 70 50 65 Q 55 70 60 65 Q 65 70 70 65" fill="none" stroke="currentColor" stroke-width="2"/>
+</svg>
