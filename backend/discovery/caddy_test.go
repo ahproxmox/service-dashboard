@@ -64,3 +64,62 @@ func TestCaddyGetRoutes(t *testing.T) {
 		t.Errorf("expected IP 192.168.88.71, got %s", routes[1].BackendIp)
 	}
 }
+
+func TestCaddyGetRoutesStatusError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer server.Close()
+
+	client := NewCaddyClient(server.URL)
+	_, err := client.GetRoutes()
+	if err == nil {
+		t.Error("expected error for non-200 status")
+	}
+}
+
+func TestCaddyGetRoutesMalformedJSON(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`invalid json`))
+	}))
+	defer server.Close()
+
+	client := NewCaddyClient(server.URL)
+	_, err := client.GetRoutes()
+	if err == nil {
+		t.Error("expected error for malformed JSON")
+	}
+}
+
+func TestCaddyGetRoutesSkipsInvalidRoutes(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`[
+			{"invalid": "structure"},
+			{
+				"handle": [{"upstreams": [{"dial": "192.168.88.78:3000"}]}],
+				"match": [{"host": ["kanban.internal.ahproxmox-claude.cc"]}]
+			},
+			{
+				"handle": [{}],
+				"match": [{"host": ["missing.internal.ahproxmox-claude.cc"]}]
+			}
+		]`))
+	}))
+	defer server.Close()
+
+	client := NewCaddyClient(server.URL)
+	routes, err := client.GetRoutes()
+	if err != nil {
+		t.Fatalf("GetRoutes failed: %v", err)
+	}
+
+	if len(routes) != 1 {
+		t.Errorf("expected 1 valid route (skipped 2 invalid), got %d", len(routes))
+	}
+
+	if routes[0].Domain != "kanban.internal.ahproxmox-claude.cc" {
+		t.Errorf("expected kanban domain, got %s", routes[0].Domain)
+	}
+}
