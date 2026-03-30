@@ -24,7 +24,7 @@ cache:
   discovery_ttl: 10s
 `
 	tmpFile := t.TempDir() + "/test-config.yaml"
-	os.WriteFile(tmpFile, []byte(configYAML), 0644)
+	_ = os.WriteFile(tmpFile, []byte(configYAML), 0644)
 
 	cfg, err := LoadConfig(tmpFile)
 	if err != nil {

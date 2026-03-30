@@ -11,7 +11,7 @@ func TestProxmoxGetContainers(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api2/json/nodes/pve/lxc" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
+			_ = w.Write([]byte(`{
 				"data": [
 					{"vmid": 122, "hostname": "kanban", "status": "running", "ip": "192.168.88.78"},
 					{"vmid": 111, "hostname": "rag", "status": "running", "ip": "192.168.88.71"},

@@ -13,7 +13,7 @@ func TestPrometheusGetMetrics(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 
 		if strings.Contains(query, "node_cpu_seconds_total") {
-			w.Write([]byte(`{
+			_ = w.Write([]byte(`{
 				"status": "success",
 				"data": {
 					"resultType": "instant",
@@ -23,7 +23,7 @@ func TestPrometheusGetMetrics(t *testing.T) {
 				}
 			}`))
 		} else if strings.Contains(query, "node_memory_MemTotal_bytes") {
-			w.Write([]byte(`{
+			_ = w.Write([]byte(`{
 				"status": "success",
 				"data": {
 					"resultType": "instant",
@@ -33,7 +33,7 @@ func TestPrometheusGetMetrics(t *testing.T) {
 				}
 			}`))
 		} else if strings.Contains(query, "node_memory_MemAvailable_bytes") {
-			w.Write([]byte(`{
+			_ = w.Write([]byte(`{
 				"status": "success",
 				"data": {
 					"resultType": "instant",
@@ -43,7 +43,7 @@ func TestPrometheusGetMetrics(t *testing.T) {
 				}
 			}`))
 		} else {
-			w.Write([]byte(`{"status": "success", "data": {"resultType": "instant", "result": []}}`))
+			_ = w.Write([]byte(`{"status": "success", "data": {"resultType": "instant", "result": []}}`))
 		}
 	}))
 	defer server.Close()
