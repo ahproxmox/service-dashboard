@@ -13,9 +13,9 @@ func TestProxmoxGetContainers(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 			_, _ = w.Write([]byte(`{
 				"data": [
-					{"vmid": 122, "hostname": "kanban", "status": "running", "ip": "192.168.88.78"},
-					{"vmid": 111, "hostname": "rag", "status": "running", "ip": "192.168.88.71"},
-					{"vmid": 104, "hostname": "openclaw", "status": "stopped"}
+					{"vmid": 122, "name": "kanban", "status": "running", "ip": "192.168.88.78"},
+					{"vmid": 111, "name": "rag", "status": "running", "ip": "192.168.88.71"},
+					{"vmid": 104, "name": "openclaw", "status": "stopped"}
 				]
 			}`))
 		}

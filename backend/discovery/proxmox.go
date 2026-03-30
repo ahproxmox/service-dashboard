@@ -17,7 +17,7 @@ type Container struct {
 
 type proxmoxContainer struct {
 	Vmid     int    `json:"vmid"`
-	Hostname string `json:"hostname"`
+	Hostname string `json:"name"`
 	Status   string `json:"status"`
 	Ip       string `json:"ip"`
 }
