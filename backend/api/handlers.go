@@ -111,12 +111,13 @@ func GetHealth(w http.ResponseWriter, r *http.Request) {
 	// Check connectivity (quick probe)
 	_, proxmoxErr := proxmoxClient.GetContainers()
 	_, caddyErr := caddyClient.GetRoutes()
+	_, prometheusErr := prometheusClient.GetMetrics("127.0.0.1")
 
 	resp := HealthResponse{
 		Status:              "ok",
 		ProxmoxConnected:    proxmoxErr == nil,
 		CaddyConnected:      caddyErr == nil,
-		PrometheusConnected: true, // Prometheus connectivity checked on-demand in GetMetrics
+		PrometheusConnected: prometheusErr == nil,
 		Timestamp:           time.Now().Unix(),
 	}
 

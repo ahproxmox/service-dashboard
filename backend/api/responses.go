@@ -1,20 +1,15 @@
 package api
 
-type Service struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Status   string `json:"status"` // "running" or "stopped"
-	HttpsUrl *string `json:"httpsUrl"`
-	Metrics  interface{} `json:"metrics"` // Can be nil or *metrics.Metrics
-}
+import (
+	"github.com/ahproxmox/service-dashboard/backend/metrics"
+)
 
-type Metrics struct {
-	CpuPercent      float64 `json:"cpuPercent"`
-	RamMb           int     `json:"ramMb"`
-	RamPercent      float64 `json:"ramPercent"`
-	DiskPercent     float64 `json:"diskPercent"`
-	NetworkInMbps   float64 `json:"networkInMbps"`
-	NetworkOutMbps  float64 `json:"networkOutMbps"`
+type Service struct {
+	Id       string            `json:"id"`
+	Name     string            `json:"name"`
+	Status   string            `json:"status"` // "running" or "stopped"
+	HttpsUrl *string           `json:"httpsUrl"`
+	Metrics  *metrics.Metrics  `json:"metrics"` // Can be nil or *metrics.Metrics
 }
 
 type ServicesResponse struct {
