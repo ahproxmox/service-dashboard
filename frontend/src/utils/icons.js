@@ -1,8 +1,20 @@
+import servicesConfig from '../../public/config/services-config.json'
+
 export const getServiceIcon = (serviceName) => {
-  // Returns icon URL for service, or null for placeholder
-  // Will be populated with actual icons in Task 13
-  const icons = {
-    // Example entries to be filled in Task 13
-  }
-  return icons[serviceName.toLowerCase()] || null
+  const config = servicesConfig.services[serviceName.toLowerCase().replace(/_/g, '-')]
+  return config?.icon || null
+}
+
+export const getServiceColor = (serviceName) => {
+  const config = servicesConfig.services[serviceName.toLowerCase().replace(/_/g, '-')]
+  return config?.color || '#667eea'
+}
+
+export const getServiceDisplayName = (serviceName) => {
+  const config = servicesConfig.services[serviceName.toLowerCase().replace(/_/g, '-')]
+  return config?.displayName || serviceName
+}
+
+export const getThreshold = (metric, level) => {
+  return servicesConfig.thresholds[metric]?.[level] || null
 }

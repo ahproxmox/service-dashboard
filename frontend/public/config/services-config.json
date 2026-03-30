@@ -1,0 +1,68 @@
+{
+  "services": {
+    "kanban": {
+      "displayName": "Kanban Board",
+      "icon": "/icons/kanban.svg",
+      "color": "#667eea"
+    },
+    "rag": {
+      "displayName": "RAG Engine",
+      "icon": "/icons/rag.svg",
+      "color": "#764ba2"
+    },
+    "openclaw": {
+      "displayName": "OpenClaw",
+      "icon": "/icons/openclaw.svg",
+      "color": "#f093fb"
+    },
+    "mirofish": {
+      "displayName": "MiroFish",
+      "icon": "/icons/mirofish.svg",
+      "color": "#4facfe"
+    },
+    "doc-scraper": {
+      "displayName": "Doc Scraper",
+      "icon": "/icons/doc-scraper.svg",
+      "color": "#43e97b"
+    },
+    "immich": {
+      "displayName": "Immich",
+      "icon": "/icons/immich.svg",
+      "color": "#fa709a"
+    },
+    "jellyfin": {
+      "displayName": "Jellyfin",
+      "icon": "/icons/jellyfin.svg",
+      "color": "#30b0fe"
+    },
+    "vaultwarden": {
+      "displayName": "Vaultwarden",
+      "icon": "/icons/vaultwarden.svg",
+      "color": "#175ddc"
+    },
+    "uptime-kuma": {
+      "displayName": "Uptime Kuma",
+      "icon": "/icons/uptime-kuma.svg",
+      "color": "#1abc9c"
+    },
+    "n8n": {
+      "displayName": "n8n",
+      "icon": "/icons/n8n.svg",
+      "color": "#f16b3f"
+    }
+  },
+  "thresholds": {
+    "cpu": {
+      "warning": 50,
+      "critical": 80
+    },
+    "ram": {
+      "warning": 50,
+      "critical": 80
+    },
+    "disk": {
+      "warning": 70,
+      "critical": 85
+    }
+  }
+}
