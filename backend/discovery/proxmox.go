@@ -51,7 +51,7 @@ func NewProxmoxClient(apiUrl, tokenId, tokenSecret string) *ProxmoxClient {
 
 func (p *ProxmoxClient) GetContainers() ([]Container, error) {
 	req, _ := http.NewRequest("GET", p.apiUrl+"/api2/json/nodes/pve/lxc", nil)
-	req.Header.Set("Authorization", fmt.Sprintf("PVEAPIToken=%s:%s", p.tokenId, p.tokenSecret))
+	req.Header.Set("Authorization", fmt.Sprintf("PVEAPIToken=%s=%s", p.tokenId, p.tokenSecret))
 
 	resp, err := p.httpClient.Do(req)
 	if err != nil {
