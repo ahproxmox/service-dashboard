@@ -41,7 +41,7 @@ func main() {
 	http.HandleFunc("/health", api.GetHealth)
 
 	// Serve frontend static files
-	fs := http.FileServer(http.Dir("frontend/public"))
+	fs := http.FileServer(http.Dir("frontend/dist"))
 	http.Handle("/", fs)
 
 	// Start server
