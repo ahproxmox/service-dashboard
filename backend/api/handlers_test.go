@@ -5,9 +5,24 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/ahproxmox/service-dashboard/backend/cache"
+	"github.com/ahproxmox/service-dashboard/backend/config"
+	"github.com/ahproxmox/service-dashboard/backend/discovery"
+	"github.com/ahproxmox/service-dashboard/backend/metrics"
 )
 
 func TestServicesEndpoint(t *testing.T) {
+	// Initialize handlers with minimal mocks
+	c := cache.NewCache()
+	proxmox := discovery.NewProxmoxClient("https://test:8006", "test@pam!token", "secret")
+	caddy := discovery.NewCaddyClient("http://test:2019")
+	prom := metrics.NewPrometheusClient("http://test:9090")
+	matcher := discovery.NewMatcher()
+	cfg := &config.Config{}
+
+	InitHandlers(c, proxmox, caddy, prom, matcher, cfg)
+
 	handler := http.HandlerFunc(GetServices)
 
 	req := httptest.NewRequest("GET", "/api/services", nil)

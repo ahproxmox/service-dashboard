@@ -39,7 +39,7 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 	// Check cache first
 	if cached, ok := globalCache.Get("services"); ok {
 		if resp, ok := cached.(ServicesResponse); ok {
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 			return
 		}
 	}
@@ -102,7 +102,7 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 	// Cache for StatusTTL duration
 	globalCache.Set("services", resp, cfg.Cache.StatusTTL)
 
-	json.NewEncoder(w).Encode(resp)
+	_ = json.NewEncoder(w).Encode(resp)
 }
 
 func GetHealth(w http.ResponseWriter, r *http.Request) {
@@ -121,5 +121,5 @@ func GetHealth(w http.ResponseWriter, r *http.Request) {
 		Timestamp:           time.Now().Unix(),
 	}
 
-	json.NewEncoder(w).Encode(resp)
+	_ = json.NewEncoder(w).Encode(resp)
 }
