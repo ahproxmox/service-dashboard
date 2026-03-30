@@ -17,6 +17,8 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.21'
+          cache: true
+          cache-dependency-path: 'backend/go.sum'
 
       - name: Run backend tests
         run: |
@@ -98,6 +100,8 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.21'
+          cache: true
+          cache-dependency-path: 'backend/go.sum'
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
