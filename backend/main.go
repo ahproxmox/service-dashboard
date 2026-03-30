@@ -40,6 +40,10 @@ func main() {
 	http.HandleFunc("/api/services", api.GetServices)
 	http.HandleFunc("/health", api.GetHealth)
 
+	// Serve frontend static files
+	fs := http.FileServer(http.Dir("frontend/public"))
+	http.Handle("/", fs)
+
 	// Start server
 	addr := fmt.Sprintf(":%d", cfg.Server.Port)
 	log.Printf("Service Dashboard starting on %s", addr)
