@@ -13,11 +13,34 @@ import (
 )
 
 func TestServicesEndpoint(t *testing.T) {
-	// Initialize handlers with minimal mocks
+	// Mock Proxmox server
+	proxmoxServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api2/json/nodes/pve/lxc" {
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"data":[{"vmid":122,"hostname":"kanban","status":"running","ip":"192.168.88.78"}]}`))
+		}
+	}))
+	defer proxmoxServer.Close()
+
+	// Mock Caddy server
+	caddyServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[{"handle":[{"upstreams":[{"dial":"192.168.88.78:3000"}]}],"match":[{"host":["kanban.internal"]}]}]`))
+	}))
+	defer caddyServer.Close()
+
+	// Mock Prometheus server
+	promServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"status":"success","data":{"resultType":"instant","result":[]}}`))
+	}))
+	defer promServer.Close()
+
+	// Initialize handlers with mock servers
 	c := cache.NewCache()
-	proxmox := discovery.NewProxmoxClient("https://test:8006", "test@pam!token", "secret")
-	caddy := discovery.NewCaddyClient("http://test:2019")
-	prom := metrics.NewPrometheusClient("http://test:9090")
+	proxmox := discovery.NewProxmoxClient(proxmoxServer.URL, "test@pam!token", "secret")
+	caddy := discovery.NewCaddyClient(caddyServer.URL)
+	prom := metrics.NewPrometheusClient(promServer.URL)
 	matcher := discovery.NewMatcher()
 	cfg := &config.Config{}
 
