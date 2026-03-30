@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+proxmox:
+  api_url: https://192.168.88.5:8006
+  token_id: "user@pam!token_name"
+  token_secret: "${PROXMOX_TOKEN}"
+
+caddy:
+  api_url: http://192.168.88.82:2019
+
+prometheus:
+  url: http://192.168.88.73:9090
+
+cache:
+  status_ttl: 2s
+  metrics_ttl: 25s
+  discovery_ttl: 10s
