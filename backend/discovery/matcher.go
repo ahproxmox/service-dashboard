@@ -23,11 +23,12 @@ func (m *Matcher) Match(containers []Container, routes []Route) []MatchedService
 
 	for _, container := range containers {
 		var httpsUrl *string
+		var url string
 
 		// Primary: IP matching
 		for _, route := range routes {
 			if route.BackendIp == container.Ip {
-				url := fmt.Sprintf("https://%s", route.Domain)
+				url = fmt.Sprintf("https://%s", route.Domain)
 				httpsUrl = &url
 				break
 			}
@@ -37,7 +38,7 @@ func (m *Matcher) Match(containers []Container, routes []Route) []MatchedService
 		if httpsUrl == nil {
 			for _, route := range routes {
 				if strings.Contains(route.Domain, container.Name) {
-					url := fmt.Sprintf("https://%s", route.Domain)
+					url = fmt.Sprintf("https://%s", route.Domain)
 					httpsUrl = &url
 					break
 				}
