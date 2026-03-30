@@ -9,7 +9,7 @@ import (
 func TestCaddyGetRoutes(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_ = w.Write([]byte(`[
+		_, _ = w.Write([]byte(`[
 			{
 				"handle": [
 					{
@@ -81,7 +81,7 @@ func TestCaddyGetRoutesStatusError(t *testing.T) {
 func TestCaddyGetRoutesMalformedJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_ = w.Write([]byte(`invalid json`))
+		_, _ = w.Write([]byte(`invalid json`))
 	}))
 	defer server.Close()
 
@@ -95,7 +95,7 @@ func TestCaddyGetRoutesMalformedJSON(t *testing.T) {
 func TestCaddyGetRoutesSkipsInvalidRoutes(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		_ = w.Write([]byte(`[
+		_, _ = w.Write([]byte(`[
 			{"invalid": "structure"},
 			{
 				"handle": [{"upstreams": [{"dial": "192.168.88.78:3000"}]}],
