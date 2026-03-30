@@ -54,9 +54,8 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 
 	routes, err := caddyClient.GetRoutes()
 	if err != nil {
-		log.Printf("failed to get routes: %v", err)
-		http.Error(w, fmt.Sprintf("failed to get routes: %v", err), http.StatusInternalServerError)
-		return
+		log.Printf("caddy routes unavailable (non-fatal): %v", err)
+		routes = nil
 	}
 
 	// Match services
