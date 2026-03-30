@@ -56,6 +56,11 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("caddy routes unavailable (non-fatal): %v", err)
 		routes = nil
+	} else {
+		log.Printf("found %d caddy routes", len(routes))
+		for _, r := range routes {
+			log.Printf("  route: %s -> %s", r.Domain, r.BackendIp)
+		}
 	}
 
 	// Match services
