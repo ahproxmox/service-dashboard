@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.local
+*.log
+README.md
+docs
+.DS_Store
+.vscode
+.idea
+*.swp
+*.swo
