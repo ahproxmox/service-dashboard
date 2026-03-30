@@ -34,10 +34,12 @@ func (m *Matcher) Match(containers []Container, routes []Route) []MatchedService
 			}
 		}
 
-		// Fallback: Hostname matching
+		// Fallback: Hostname matching (check both directions)
 		if httpsUrl == nil {
 			for _, route := range routes {
-				if strings.Contains(route.Domain, container.Name) {
+				subdomain := strings.Split(route.Domain, ".")[0]
+				if strings.Contains(route.Domain, container.Name) ||
+					strings.Contains(container.Name, subdomain) {
 					url = fmt.Sprintf("https://%s", route.Domain)
 					httpsUrl = &url
 					break
