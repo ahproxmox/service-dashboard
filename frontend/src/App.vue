@@ -3,9 +3,9 @@
     <header class="app-header">
       <h1 class="app-title">Service Dashboard</h1>
       <div class="header-meta">
-        <span class="last-updated">Updated: {{ lastUpdated }}</span>
+        <span class="last-updated">{{ lastUpdated }}</span>
         <button @click="refreshServices" class="refresh-button" :disabled="loading">
-          🔄 Refresh
+          Refresh
         </button>
       </div>
     </header>
@@ -81,62 +81,66 @@ onMounted(() => {
 <style scoped>
 #app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--color-background-page-start);
   display: flex;
   flex-direction: column;
 }
 
 .app-header {
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: var(--color-background-surface);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 .app-title {
-  margin: 0 0 12px 0;
-  font-size: 32px;
-  font-weight: 700;
-  color: #222;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .header-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
 
 .last-updated {
-  font-size: 12px;
-  color: #999;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
 }
 
 .refresh-button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  background: none;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-default);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-sans);
+  transition: all var(--transition-fast);
 }
 
 .refresh-button:hover:not(:disabled) {
-  background: #5568d3;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  color: var(--color-text-primary);
+  border-color: var(--color-text-muted);
 }
 
 .refresh-button:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .app-main {
   flex: 1;
-  padding: 24px;
+  padding: 1.5rem;
   overflow-y: auto;
 }
 
@@ -147,17 +151,17 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e0e0e0;
-  border-top-color: #667eea;
-  border-radius: 50%;
+  border: 3px solid var(--color-border-default);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-md);
 }
 
 @keyframes spin {
@@ -165,12 +169,12 @@ onMounted(() => {
 }
 
 .app-footer {
-  background: white;
-  border-top: 1px solid #e0e0e0;
-  padding: 16px 24px;
+  background: var(--color-background-surface);
+  border-top: 1px solid var(--color-border-default);
+  padding: var(--spacing-md) var(--spacing-xl);
   text-align: center;
-  font-size: 12px;
-  color: #999;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   margin-top: auto;
 }
 
@@ -179,20 +183,12 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-  #app {
-    padding: 0;
-  }
-
   .app-header {
-    padding: 16px;
-  }
-
-  .app-title {
-    font-size: 24px;
+    padding: 0.75rem 1rem;
   }
 
   .app-main {
-    padding: 16px;
+    padding: 1rem;
   }
 }
 </style>

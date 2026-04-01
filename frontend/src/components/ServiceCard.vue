@@ -78,31 +78,32 @@ const capitalizeStatus = (status) => {
 
 <style scoped>
 .service-card {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  background: var(--color-background-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
   min-height: 200px;
   display: flex;
   flex-direction: column;
 }
 
 .service-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  border-color: #3e4460;
   transform: translateY(-2px);
 }
 
 .service-card.service-stopped {
-  opacity: 0.7;
-  background-color: #fafafa;
+  opacity: 0.6;
+  background-color: var(--color-background-surface-dim);
 }
 
 .service-header {
   display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .service-icon-container {
@@ -121,14 +122,14 @@ const capitalizeStatus = (status) => {
 .service-icon-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-gradient-end) 100%);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 24px;
+  color: #ffffff;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
 }
 
 .status-indicator {
@@ -137,18 +138,18 @@ const capitalizeStatus = (status) => {
   right: 0;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--color-background-surface);
+  box-shadow: var(--shadow-md);
 }
 
 .status-indicator.running {
-  background-color: #4caf50;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-status-running);
+  box-shadow: 0 0 8px var(--color-status-running-glow), var(--shadow-md);
 }
 
 .status-indicator.stopped {
-  background-color: #999;
+  background-color: var(--color-status-stopped);
 }
 
 .service-info {
@@ -156,28 +157,28 @@ const capitalizeStatus = (status) => {
 }
 
 .service-name {
-  margin: 0 0 4px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #222;
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 .service-status {
   margin: 0;
-  font-size: 12px;
-  color: #999;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .service-url {
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-md);
 }
 
 .service-url a {
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   word-break: break-all;
 }
 
@@ -189,24 +190,24 @@ const capitalizeStatus = (status) => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .metric-row {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .metric-label {
-  color: #666;
-  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
 }
 
 .metric-value {
-  color: #222;
-  font-family: monospace;
-  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-semibold);
 }
 
 .metrics-placeholder {
@@ -214,8 +215,8 @@ const capitalizeStatus = (status) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
-  font-size: 14px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
   font-style: italic;
 }
 </style>

@@ -18,11 +18,12 @@ defineEmits(['close'])
 
 <style scoped>
 .error-banner {
-  background-color: #fee;
-  border-left: 4px solid #d32f2f;
-  padding: 16px;
+  background-color: #2e1a1a;
+  border: 1px solid #5a2e2e;
+  border-left: 4px solid #f87171;
+  padding: 12px 16px;
   margin-bottom: 16px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .error-content {
@@ -32,27 +33,29 @@ defineEmits(['close'])
 }
 
 .error-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .error-message {
   flex: 1;
-  color: #d32f2f;
+  color: #f87171;
   font-size: 14px;
 }
 
 .error-close {
   background: none;
   border: none;
-  font-size: 24px;
-  color: #d32f2f;
+  font-size: 20px;
+  color: #f87171;
   cursor: pointer;
   padding: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  font-family: var(--font-family-sans);
 }
 
 .error-close:hover {
